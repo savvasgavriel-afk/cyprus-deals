@@ -1,0 +1,10 @@
+{
+  "name": "Cyprus Deals",
+  "short_name": "Cyprus Deals",
+  "description": "Οι καλύτερες προσφορές στην Κύπρο",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1296db",
+  "orientation": "portrait"
+}
