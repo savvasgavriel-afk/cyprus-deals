@@ -1,16 +1,372 @@
-<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cyprus Deals</title><style>body{font-family:Arial;margin:0;background:#f3f6fb;color:#172033}header{background:linear-gradient(135deg,#078bea,#16b6df);color:#fff;padding:35px 15px;text-align:center}main{max-width:850px;margin:auto;padding:15px}button{border:0;border-radius:16px;padding:14px 18px;background:#078bea;color:white;font-weight:bold;font-size:16px;margin:5px;cursor:pointer}input,textarea{width:100%;box-sizing:border-box;padding:14px;margin:6px 0;border:1px solid #ddd;border-radius:14px;font-size:16px}.panel,.offer{background:#fff;border-radius:22px;padding:20px;margin:15px 0;box-shadow:0 5px 20px #0001}.hidden{display:none}.price{font-size:23px;color:#078bea;font-weight:bold}.old{text-decoration:line-through;color:#888;margin-left:8px}.error{background:#fee2e2;padding:10px;border-radius:10px}.ok{background:#dcfce7;padding:10px;border-radius:10px}</style></head><body><header><h1>🎁 Cyprus Deals</h1><p>Οι καλύτερες προσφορές στην Κύπρο</p></header><main><div><button onclick="show('offers')">🎁 Προσφορές</button><button onclick="show('register')">🏪 Νέα επιχείρηση</button><button onclick="show('login')">🔐 Σύνδεση</button><button onclick="show('dash')">📊 Dashboard</button></div><section id="offers" class="panel"><h2>🎁 Προσφορές</h2><input id="search" placeholder="🔎 Αναζήτηση..." oninput="render()"><div id="list">Φόρτωση προσφορών...</div></section><section id="login" class="panel hidden"><h2>🔐 Σύνδεση επιχείρησης</h2><input id="le" type="email" placeholder="Email"><input id="lp" type="password" placeholder="Κωδικός"><button onclick="login()">Σύνδεση</button><div id="lm"></div></section><section id="register" class="panel hidden"><h2>🏪 Νέα επιχείρηση</h2><input id="re" type="email" placeholder="Email"><input id="rp" type="password" placeholder="Κωδικός"><input id="bn" placeholder="Όνομα επιχείρησης"><textarea id="bd" placeholder="Περιγραφή"></textarea><input id="bc" placeholder="Κατηγορία π.χ. food"><input id="bp" placeholder="Τηλέφωνο"><input id="ba" placeholder="Διεύθυνση"><input id="bcity" placeholder="Πόλη"><button onclick="register()">Δημιουργία λογαριασμού</button><div id="rm"></div></section><section id="dash" class="panel hidden"><h2>📊 Dashboard</h2><div id="bi"></div><h3>➕ Νέα προσφορά</h3><input id="ot" placeholder="Τίτλος"><textarea id="od" placeholder="Περιγραφή"></textarea><input id="op" type="number" step=".01" placeholder="Τιμή"><input id="oop" type="number" step=".01" placeholder="Παλιά τιμή"><input id="ol" placeholder="Τοποθεσία"><button onclick="addOffer()">➕ Προσθήκη</button><div id="om"></div><h3>📋 Οι προσφορές μου</h3><div id="mine"></div><button onclick="logout()">Έξοδος</button></section></main><script>
-const URL='https://jsbqhdwxuhiejjnwiwbe.supabase.co',KEY='sb_publishable_kXuBKDd0IFAzPUyHR_zsEg_4rRD3uPn';let token='',user=null,biz=null,offers=[],businesses=[];
-async function api(path,opt={}){let h={apikey:KEY,'Content-Type':'application/json',...(opt.headers||{})};if(token)h.Authorization='Bearer '+token;let r=await fetch(URL+path,{...opt,headers:h}),t=await r.text(),d;try{d=t?JSON.parse(t):null}catch{d=t}if(!r.ok)throw Error(d?.message||d?.error_description||'Supabase error');return d}
-function show(id){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(id==='offers')load();if(id==='dash'){if(!token){show('login');return}dashboard()}}
-async function register(){let e=re.value.trim(),p=rp.value,n=bn.value.trim(),m=rm;m.innerHTML='';try{let x=await api('/auth/v1/signup',{method:'POST',body:JSON.stringify({email:e,password:p})});if(x.access_token){token=x.access_token;user=x.user;await createBiz();show('dash')}else{m.innerHTML='<div class="ok">✅ Έλεγξε το email σου και μετά κάνε σύνδεση.</div>';le.value=e;show('login')}}catch(x){m.innerHTML='<div class="error">❌ '+x.message+'</div>'}}
-async function createBiz(){let d=await api('/rest/v1/businesses',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({owner_id:user.id,name:bn.value.trim(),description:bd.value.trim(),category:bc.value.trim(),phone:bp.value.trim(),address:ba.value.trim(),city:bcity.value.trim(),approved:false,featured:false})});biz=d[0]}
-async function login(){try{let x=await api('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email:le.value.trim(),password:lp.value})});token=x.access_token;user=x.user;await getBiz();show('dash')}catch(x){lm.innerHTML='<div class="error">❌ '+x.message+'</div>'}}
-async function getBiz(){let d=await api('/rest/v1/businesses?select=*&owner_id=eq.'+encodeURIComponent(user.id));biz=d[0]||null}
-async function dashboard(){await getBiz();bi.innerHTML=biz?'<div class="ok"><b>🏪 '+esc(biz.name)+'</b><br>'+esc(biz.city||'')+'<br>'+ (biz.approved?'✅ Εγκεκριμένη':'⏳ Αναμονή έγκρισης')+'</div>':'<div class="error">Δεν βρέθηκε επιχείρηση.</div>';loadMine()}
-async function addOffer(){try{await api('/rest/v1/offers',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({title:ot.value.trim(),description:od.value.trim(),price:Number(op.value),old_price:oop.value?Number(oop.value):null,business_id:biz.id,location:ol.value.trim()||biz.city||'',active:true})});om.innerHTML='<div class="ok">✅ Προσφορά προστέθηκε!</div>';ot.value=od.value=op.value=oop.value=ol.value='';loadMine();load()}catch(x){om.innerHTML='<div class="error">❌ '+x.message+'</div>'}}
-async function loadMine(){let d=await api('/rest/v1/offers?select=*&business_id=eq.'+biz.id+'&order=id.desc');mine.innerHTML=d.length?d.map(o=>'<div class="offer"><b>'+esc(o.title)+'</b><br>€'+Number(o.price).toFixed(2)+' <button onclick="del('+o.id+')">🗑️ Διαγραφή</button></div>').join(''):'Δεν έχεις προσφορές.'}
-async function del(id){if(!confirm('Να διαγραφεί;'))return;try{await api('/rest/v1/offers?id=eq.'+id,{method:'DELETE'});loadMine();load()}catch(x){alert(x.message)}}
-async function load(){try{offers=await api('/rest/v1/offers?select=*&active=eq.true&order=id.desc')||[];businesses=await api('/rest/v1/businesses?select=id,name,category,city')||[];render()}catch(x){list.innerHTML='<div class="error">❌ '+x.message+'</div>'}}
-function render(){let q=search.value.toLowerCase();let a=offers.filter(o=>(o.title+' '+(o.description||'')+' '+(o.location||'')).toLowerCase().includes(q));list.innerHTML=a.length?a.map(o=>{let b=businesses.find(x=>+x.id===+o.business_id);return '<div class="offer"><h3>🎁 '+esc(o.title)+'</h3><div>🏪 '+esc(b?.name||'Επιχείρηση')+'</div><p>'+esc(o.description||'')+'</p><span class="price">€'+Number(o.price).toFixed(2)+'</span>'+(o.old_price?'<span class="old">€'+Number(o.old_price).toFixed(2)+'</span>':'')+'<p>📍 '+esc(o.location||'')+'</p><button onclick="alert(\'🎉 Δείξε την προσφορά στην επιχείρηση.\')">🎁 Πάρε την προσφορά</button></div>'}).join(''):'Δεν βρέθηκαν προσφορές.'}
-function logout(){token='';user=null;biz=null;show('offers')}function esc(x){return String(x??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}load();
-</script></body></html>
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🎁 Cyprus Deals</title>
+
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1296db">
+<meta name="description" content="Οι καλύτερες προσφορές στην Κύπρο">
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f6fb;color:#172033}
+header{background:linear-gradient(135deg,#1296db,#16b5d8);color:white;text-align:center;padding:55px 20px}
+header h1{font-size:42px;margin:0 0 20px}
+header p{font-size:22px;margin:0}
+nav{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:28px 15px}
+button{border:0;border-radius:30px;padding:15px 25px;font-size:17px;font-weight:bold;cursor:pointer;background:#1296db;color:white}
+button:hover{opacity:.9}
+.container{max-width:1000px;margin:auto;padding:10px 20px 50px}
+section{background:white;border-radius:30px;padding:30px;margin-bottom:25px;box-shadow:0 5px 25px #00000010}
+h2{font-size:30px;margin-top:0}
+input,select{width:100%;padding:16px;border:1px solid #ddd;border-radius:18px;font-size:17px;margin:7px 0 12px}
+.card{background:#fff;border-radius:25px;padding:25px;margin:18px 0;box-shadow:0 5px 20px #00000010}
+.card h3{font-size:24px;margin:0 0 10px}
+.business{font-size:18px;margin-bottom:12px}
+.price{font-size:28px;font-weight:bold;color:#1296db}
+.old{text-decoration:line-through;color:#888;font-size:20px;margin-left:10px}
+.badge{display:inline-block;background:#e9f6ff;color:#087bb5;padding:7px 13px;border-radius:20px;margin:10px 0}
+.hidden{display:none}
+.msg{padding:14px;border-radius:15px;margin:10px 0;background:#eef8ff}
+.danger{background:#fff0f0;color:#a00}
+.success{background:#effff2;color:#08752c}
+.small{color:#777;font-size:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:650px){header h1{font-size:34px}.row{grid-template-columns:1fr}section{padding:22px}button{width:100%}}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🎁 Cyprus Deals</h1>
+<p>Οι καλύτερες προσφορές στην Κύπρο</p>
+</header>
+
+<nav>
+<button onclick="show('offers')">🎁 Προσφορές</button>
+<button onclick="show('register')">🏪 Νέα επιχείρηση</button>
+<button onclick="show('login')">🔐 Σύνδεση</button>
+<button onclick="show('dashboard')">📊 Dashboard</button>
+</nav>
+
+<div class="container">
+
+<section id="offers">
+<h2>🎁 Προσφορές</h2>
+
+<input id="search" placeholder="🔎 Αναζήτηση..." oninput="renderOffers()">
+
+<div class="row">
+<select id="category" onchange="renderOffers()">
+<option value="">Όλες οι κατηγορίες</option>
+<option value="food">🍕 Φαγητό</option>
+<option value="shopping">🛍️ Shopping</option>
+<option value="services">💇 Υπηρεσίες</option>
+<option value="cars">🚗 Αυτοκίνητα</option>
+<option value="other">📦 Άλλο</option>
+</select>
+
+<select id="city" onchange="renderOffers()">
+<option value="">Όλες οι πόλεις</option>
+<option value="Larnaca">Λάρνακα</option>
+<option value="Nicosia">Λευκωσία</option>
+<option value="Limassol">Λεμεσός</option>
+<option value="Paphos">Πάφος</option>
+</select>
+</div>
+
+<div id="offersList">Φόρτωση προσφορών...</div>
+</section>
+
+<section id="register" class="hidden">
+<h2>🏪 Εγγραφή επιχείρησης</h2>
+
+<input id="regEmail" type="email" placeholder="Email">
+<input id="regPassword" type="password" placeholder="Κωδικός">
+<input id="regName" placeholder="Όνομα επιχείρησης">
+
+<div class="row">
+<input id="regCategory" placeholder="Κατηγορία">
+<input id="regCity" placeholder="Πόλη">
+</div>
+
+<input id="regPhone" placeholder="Τηλέφωνο">
+<input id="regAddress" placeholder="Διεύθυνση">
+
+<button onclick="register()">Δημιουργία λογαριασμού</button>
+<div id="regMsg"></div>
+</section>
+
+<section id="login" class="hidden">
+<h2>🔐 Σύνδεση επιχείρησης</h2>
+
+<input id="loginEmail" type="email" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Κωδικός">
+
+<button onclick="login()">Σύνδεση</button>
+<div id="loginMsg"></div>
+</section>
+
+<section id="dashboard" class="hidden">
+<h2>📊 Dashboard</h2>
+
+<div id="businessInfo"></div>
+
+<hr>
+
+<h3>➕ Νέα προσφορά</h3>
+
+<input id="offerTitle" placeholder="Τίτλος προσφοράς">
+<input id="offerDescription" placeholder="Περιγραφή">
+
+<div class="row">
+<input id="offerPrice" type="number" step="0.01" placeholder="Τιμή">
+<input id="offerOldPrice" type="number" step="0.01" placeholder="Παλιά τιμή">
+</div>
+
+<div class="row">
+<select id="offerCategory">
+<option value="food">🍕 Φαγητό</option>
+<option value="shopping">🛍️ Shopping</option>
+<option value="services">💇 Υπηρεσίες</option>
+<option value="cars">🚗 Αυτοκίνητα</option>
+<option value="other">📦 Άλλο</option>
+</select>
+
+<input id="offerLocation" placeholder="Τοποθεσία">
+</div>
+
+<input id="offerImage" placeholder="URL εικόνας (προαιρετικό)">
+
+<button onclick="addOffer()">Δημοσίευση προσφοράς</button>
+
+<div id="offerMsg"></div>
+
+<hr>
+
+<h3>📋 Οι προσφορές μου</h3>
+<div id="myOffers">Φόρτωση...</div>
+
+<br>
+<button onclick="logout()">🚪 Αποσύνδεση</button>
+</section>
+
+</div>
+
+<script>
+
+const SUPABASE_URL =
+"https://jsbqhdwxuhiejjnwiwbe.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_kXuBKDd0IFAzPUyHR_zsEg_4rRD3uPn";
+
+let accessToken="";
+let currentUser=null;
+let myBusiness=null;
+let offers=[];
+
+async function api(path,options={}){
+  const headers={
+    "apikey":SUPABASE_KEY,
+    "Content-Type":"application/json",
+    ...(options.headers||{})
+  };
+
+  if(accessToken){
+    headers.Authorization="Bearer "+accessToken;
+  }
+
+  const r=await fetch(SUPABASE_URL+path,{
+    ...options,
+    headers
+  });
+
+  const text=await r.text();
+
+  let data=null;
+  try{data=text?JSON.parse(text):null}catch(e){data=text}
+
+  if(!r.ok){
+    throw new Error(
+      data?.message ||
+      data?.error_description ||
+      data?.hint ||
+      "Σφάλμα"
+    );
+  }
+
+  return data;
+}
+
+function show(id){
+  document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+
+  if(id==="offers") loadOffers();
+  if(id==="dashboard") dashboard();
+}
+
+async function register(){
+
+  const email=document.getElementById("regEmail").value.trim();
+  const password=document.getElementById("regPassword").value;
+  const name=document.getElementById("regName").value.trim();
+  const category=document.getElementById("regCategory").value.trim();
+  const city=document.getElementById("regCity").value.trim();
+  const phone=document.getElementById("regPhone").value.trim();
+  const address=document.getElementById("regAddress").value.trim();
+
+  const msg=document.getElementById("regMsg");
+
+  if(!email||!password||!name){
+    msg.className="msg danger";
+    msg.textContent="Συμπλήρωσε email, κωδικό και όνομα επιχείρησης.";
+    return;
+  }
+
+  try{
+
+    const u=await api("/auth/v1/signup",{
+      method:"POST",
+      body:JSON.stringify({
+        email,
+        password
+      })
+    });
+
+    if(!u?.user){
+      throw new Error("Δεν δημιουργήθηκε ο λογαριασμός.");
+    }
+
+    await api("/rest/v1/businesses",{
+      method:"POST",
+      headers:{
+        "Prefer":"return=minimal"
+      },
+      body:JSON.stringify({
+        owner_id:u.user.id,
+        name,
+        category,
+        city,
+        phone,
+        address,
+        approved:false,
+        featured:false
+      })
+    });
+
+    msg.className="msg success";
+    msg.textContent=
+      "Ο λογαριασμός δημιουργήθηκε. Έλεγξε το email σου για επιβεβαίωση.";
+
+  }catch(e){
+
+    msg.className="msg danger";
+    msg.textContent=e.message;
+  }
+}
+
+async function login(){
+
+  const email=document.getElementById("loginEmail").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  const msg=document.getElementById("loginMsg");
+
+  try{
+
+    const x=await api(
+      "/auth/v1/token?grant_type=password",
+      {
+        method:"POST",
+        body:JSON.stringify({
+          email,
+          password
+        })
+      }
+    );
+
+    accessToken=x.access_token;
+    currentUser=x.user;
+
+    msg.className="msg success";
+    msg.textContent="Επιτυχής σύνδεση!";
+
+    setTimeout(()=>{
+      show("dashboard");
+    },500);
+
+  }catch(e){
+
+    msg.className="msg danger";
+    msg.textContent=e.message;
+  }
+}
+
+async function getBusiness(){
+
+  if(!currentUser)return null;
+
+  const d=await api(
+    "/rest/v1/businesses?select=*&owner_id=eq."
+    +encodeURIComponent(currentUser.id)
+  );
+
+  myBusiness=d?.[0]||null;
+
+  return myBusiness;
+}
+
+async function dashboard(){
+
+  if(!accessToken||!currentUser){
+
+    document.getElementById("businessInfo").innerHTML=
+      '<div class="msg">Πρέπει πρώτα να συνδεθείς ως επιχείρηση.</div>';
+
+    return;
+  }
+
+  try{
+
+    const b=await getBusiness();
+
+    if(!b){
+
+      document.getElementById("businessInfo").innerHTML=
+        '<div class="msg danger">Δεν βρέθηκε επιχείρηση.</div>';
+
+      return;
+    }
+
+    document.getElementById("businessInfo").innerHTML=`
+      <div class="card">
+        <h3>🏪 ${escapeHtml(b.name)}</h3>
+        <p>📍 ${escapeHtml(b.city||"")}</p>
+        <p>📞 ${escapeHtml(b.phone||"")}</p>
+        <p>Κατηγορία: ${escapeHtml(b.category||"")}</p>
+        <p>Κατάσταση:
+          <b>${b.approved?"✅ Εγκεκριμένη":"⏳ Σε αναμονή έγκρισης"}</b>
+        </p>
+      </div>
+    `;
+
+    await loadMyOffers();
+
+  }catch(e){
+
+    document.getElementById("businessInfo").innerHTML=
+      '<div class="msg danger">'+escapeHtml(e.message)+'</div>';
+  }
+}
+
+async function addOffer(){
+
+  const msg=document.getElementById("offerMsg");
+
+  try{
+
+   
