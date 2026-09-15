@@ -1,40 +1,63 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="el">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#078bea">
 <title>🎁 Cyprus Deals</title>
-
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1296db">
-<meta name="description" content="Οι καλύτερες προσφορές στην Κύπρο">
 
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f6fb;color:#172033}
-header{background:linear-gradient(135deg,#1296db,#16b5d8);color:white;text-align:center;padding:55px 20px}
-header h1{font-size:42px;margin:0 0 20px}
-header p{font-size:22px;margin:0}
-nav{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:28px 15px}
-button{border:0;border-radius:30px;padding:15px 25px;font-size:17px;font-weight:bold;cursor:pointer;background:#1296db;color:white}
-button:hover{opacity:.9}
-.container{max-width:1000px;margin:auto;padding:10px 20px 50px}
-section{background:white;border-radius:30px;padding:30px;margin-bottom:25px;box-shadow:0 5px 25px #00000010}
-h2{font-size:30px;margin-top:0}
-input,select{width:100%;padding:16px;border:1px solid #ddd;border-radius:18px;font-size:17px;margin:7px 0 12px}
-.card{background:#fff;border-radius:25px;padding:25px;margin:18px 0;box-shadow:0 5px 20px #00000010}
-.card h3{font-size:24px;margin:0 0 10px}
-.business{font-size:18px;margin-bottom:12px}
-.price{font-size:28px;font-weight:bold;color:#1296db}
-.old{text-decoration:line-through;color:#888;font-size:20px;margin-left:10px}
-.badge{display:inline-block;background:#e9f6ff;color:#087bb5;padding:7px 13px;border-radius:20px;margin:10px 0}
-.hidden{display:none}
-.msg{padding:14px;border-radius:15px;margin:10px 0;background:#eef8ff}
-.danger{background:#fff0f0;color:#a00}
-.success{background:#effff2;color:#08752c}
-.small{color:#777;font-size:14px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:650px){header h1{font-size:34px}.row{grid-template-columns:1fr}section{padding:22px}button{width:100%}}
+header{background:linear-gradient(135deg,#078bea,#16c4df);color:white;padding:35px 15px 30px;text-align:center}
+header h1{font-size:42px;margin:0 0 18px}
+header p{font-size:22px;margin:0 0 28px}
+nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+button{border:0;border-radius:28px;padding:15px 24px;font-size:18px;cursor:pointer}
+nav button,.primary{background:#078bea;color:white}
+nav button{background:white;color:#0877b8}
+nav button:hover,.primary:hover{opacity:.9}
+main{max-width:1050px;margin:auto;padding:25px 15px}
+.page{display:none}
+.page.active{display:block}
+.hero,.box,.card{background:white;border-radius:28px;padding:30px;margin-bottom:22px;box-shadow:0 8px 30px #0000000b}
+.hero{text-align:center}
+.hero h2{font-size:40px;color:#078bea;margin:10px 0}
+.hero p{font-size:22px;color:#697180;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.stat{text-align:center;background:white;border-radius:25px;padding:28px}
+.stat strong{display:block;font-size:42px;color:#078bea}
+input,textarea,select{width:100%;padding:15px;border:1px solid #ddd;border-radius:16px;font-size:17px;margin:7px 0 14px}
+textarea{min-height:100px}
+.filters{display:flex;gap:10px;overflow:auto;margin:12px 0 20px}
+.filter{white-space:nowrap;background:#e9f6fd;color:#17698d}
+.filter.active{background:#078bea;color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card h3{font-size:25px;margin:0 0 12px}
+.business{font-size:19px;margin-bottom:12px}
+.description{font-size:18px;line-height:1.5}
+.price{font-size:30px;font-weight:bold;color:#078bea}
+.old{text-decoration:line-through;color:#888;font-size:20px;margin-left:8px}
+.badge{display:inline-block;background:#e5f8ec;color:#168044;padding:7px 12px;border-radius:15px;font-weight:bold;margin-bottom:12px}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+.modal.show{display:flex}
+.modalbox{background:white;border-radius:25px;padding:30px;max-width:450px;width:100%;text-align:center}
+.coupon{font-size:34px;font-weight:bold;letter-spacing:3px;background:#eef8ff;padding:20px;border-radius:18px;color:#078bea;margin:20px 0}
+.message{padding:14px;border-radius:15px;margin:10px 0;display:none}
+.success{display:block;background:#e8f8ed;color:#176b38}
+.error{display:block;background:#ffe9e9;color:#a51f1f}
+.small{color:#707783}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1}
+.offer-actions{margin-top:18px}
+table{width:100%;border-collapse:collapse}
+td,th{padding:10px;border-bottom:1px solid #eee;text-align:left}
+footer{text-align:center;padding:30px;color:#777}
+@media(max-width:600px){
+header h1{font-size:34px}
+.hero h2{font-size:32px}
+.stats{grid-template-columns:1fr}
+}
 </style>
 </head>
 
@@ -43,76 +66,102 @@ input,select{width:100%;padding:16px;border:1px solid #ddd;border-radius:18px;fo
 <header>
 <h1>🎁 Cyprus Deals</h1>
 <p>Οι καλύτερες προσφορές στην Κύπρο</p>
+<nav>
+<button onclick="showPage('home')">🏠 Αρχική</button>
+<button onclick="showPage('offers')">🎁 Προσφορές</button>
+<button onclick="showPage('register')">🏪 Νέα επιχείρηση</button>
+<button onclick="showPage('login')">🔐 Σύνδεση</button>
+<button id="dashBtn" onclick="showPage('dashboard')" style="display:none">📊 Dashboard</button>
+</nav>
 </header>
 
-<nav>
-<button onclick="show('offers')">🎁 Προσφορές</button>
-<button onclick="show('register')">🏪 Νέα επιχείρηση</button>
-<button onclick="show('login')">🔐 Σύνδεση</button>
-<button onclick="show('dashboard')">📊 Dashboard</button>
-</nav>
+<main>
 
-<div class="container">
+<section id="home" class="page active">
+<div class="hero">
+<h2>Οι καλύτερες προσφορές στην Κύπρο</h2>
+<p>Βρες μοναδικές προσφορές από επιχειρήσεις σε όλη την Κύπρο.</p>
+<button class="primary" onclick="showPage('offers')">🎁 Δες τις προσφορές</button>
+</div>
 
-<section id="offers">
+<div class="stats">
+<div class="stat"><strong id="offerCount">0</strong>Προσφορές</div>
+<div class="stat"><strong id="businessCount">0</strong>Επιχειρήσεις</div>
+</div>
+
+<h2>🔥 Νέες προσφορές</h2>
+<div id="homeOffers" class="grid"></div>
+</section>
+
+
+<section id="offers" class="page">
+<div class="box">
 <h2>🎁 Προσφορές</h2>
 
-<input id="search" placeholder="🔎 Αναζήτηση..." oninput="renderOffers()">
+<input id="search" placeholder="🔎 Αναζήτηση προσφοράς ή επιχείρησης..." oninput="renderOffers()">
 
-<div class="row">
-<select id="category" onchange="renderOffers()">
-<option value="">Όλες οι κατηγορίες</option>
-<option value="food">🍕 Φαγητό</option>
-<option value="shopping">🛍️ Shopping</option>
-<option value="services">💇 Υπηρεσίες</option>
-<option value="cars">🚗 Αυτοκίνητα</option>
-<option value="other">📦 Άλλο</option>
-</select>
+<div id="filters" class="filters"></div>
 
-<select id="city" onchange="renderOffers()">
-<option value="">Όλες οι πόλεις</option>
-<option value="Larnaca">Λάρνακα</option>
-<option value="Nicosia">Λευκωσία</option>
-<option value="Limassol">Λεμεσός</option>
-<option value="Paphos">Πάφος</option>
+<select id="sort" onchange="renderOffers()">
+<option value="new">Νεότερες πρώτα</option>
+<option value="price">Χαμηλότερη τιμή</option>
+<option value="discount">Μεγαλύτερη έκπτωση</option>
 </select>
 </div>
 
-<div id="offersList">Φόρτωση προσφορών...</div>
+<div id="offersList" class="grid"></div>
 </section>
 
-<section id="register" class="hidden">
-<h2>🏪 Εγγραφή επιχείρησης</h2>
 
-<input id="regEmail" type="email" placeholder="Email">
-<input id="regPassword" type="password" placeholder="Κωδικός">
+<section id="login" class="page">
+<div class="box">
+<h2>🔐 Σύνδεση επιχείρησης</h2>
+<div id="loginMsg" class="message"></div>
+
+<label>Email</label>
+<input id="loginEmail" type="email" placeholder="Email">
+
+<label>Κωδικός</label>
+<input id="loginPassword" type="password" placeholder="Κωδικός">
+
+<button class="primary" onclick="login()">🔐 Σύνδεση</button>
+
+<p class="small">Δεν έχεις λογαριασμό;</p>
+<button onclick="showPage('register')">🏪 Εγγραφή επιχείρησης</button>
+</div>
+</section>
+
+
+<section id="register" class="page">
+<div class="box">
+<h2>🏪 Νέα επιχείρηση</h2>
+<div id="registerMsg" class="message"></div>
+
 <input id="regName" placeholder="Όνομα επιχείρησης">
+<textarea id="regDescription" placeholder="Περιγραφή επιχείρησης"></textarea>
 
 <div class="row">
-<input id="regCategory" placeholder="Κατηγορία">
+<input id="regCategory" placeholder="Κατηγορία π.χ. Food">
 <input id="regCity" placeholder="Πόλη">
 </div>
 
 <input id="regPhone" placeholder="Τηλέφωνο">
 <input id="regAddress" placeholder="Διεύθυνση">
 
-<button onclick="register()">Δημιουργία λογαριασμού</button>
-<div id="regMsg"></div>
+<hr>
+
+<input id="regEmail" type="email" placeholder="Email">
+<input id="regPassword" type="password" placeholder="Κωδικός">
+
+<button class="primary" onclick="registerBusiness()">🏪 Δημιουργία λογαριασμού</button>
+</div>
 </section>
 
-<section id="login" class="hidden">
-<h2>🔐 Σύνδεση επιχείρησης</h2>
 
-<input id="loginEmail" type="email" placeholder="Email">
-<input id="loginPassword" type="password" placeholder="Κωδικός">
-
-<button onclick="login()">Σύνδεση</button>
-<div id="loginMsg"></div>
-</section>
-
-<section id="dashboard" class="hidden">
+<section id="dashboard" class="page">
+<div class="box">
 <h2>📊 Dashboard</h2>
-
+<div id="dashMsg" class="message"></div>
 <div id="businessInfo"></div>
 
 <hr>
@@ -120,7 +169,7 @@ input,select{width:100%;padding:16px;border:1px solid #ddd;border-radius:18px;fo
 <h3>➕ Νέα προσφορά</h3>
 
 <input id="offerTitle" placeholder="Τίτλος προσφοράς">
-<input id="offerDescription" placeholder="Περιγραφή">
+<textarea id="offerDescription" placeholder="Περιγραφή"></textarea>
 
 <div class="row">
 <input id="offerPrice" type="number" step="0.01" placeholder="Τιμή">
@@ -128,245 +177,664 @@ input,select{width:100%;padding:16px;border:1px solid #ddd;border-radius:18px;fo
 </div>
 
 <div class="row">
-<select id="offerCategory">
-<option value="food">🍕 Φαγητό</option>
-<option value="shopping">🛍️ Shopping</option>
-<option value="services">💇 Υπηρεσίες</option>
-<option value="cars">🚗 Αυτοκίνητα</option>
-<option value="other">📦 Άλλο</option>
-</select>
-
 <input id="offerLocation" placeholder="Τοποθεσία">
+<input id="offerImage" placeholder="URL εικόνας">
 </div>
 
-<input id="offerImage" placeholder="URL εικόνας (προαιρετικό)">
+<button class="primary" onclick="saveOffer()">➕ Δημοσίευση προσφοράς</button>
+</div>
 
-<button onclick="addOffer()">Δημοσίευση προσφοράς</button>
+<div class="box">
+<h3>🎁 Οι προσφορές μου</h3>
+<div id="myOffers"></div>
+</div>
 
-<div id="offerMsg"></div>
-
-<hr>
-
-<h3>📋 Οι προσφορές μου</h3>
-<div id="myOffers">Φόρτωση...</div>
-
-<br>
 <button onclick="logout()">🚪 Αποσύνδεση</button>
 </section>
 
+</main>
+
+<div id="modal" class="modal">
+<div class="modalbox">
+<h2>🎉 Η προσφορά σου</h2>
+<p>Δείξε αυτόν τον κωδικό στην επιχείρηση:</p>
+<div id="couponCode" class="coupon"></div>
+<p id="couponText" class="small"></p>
+<button class="primary" onclick="closeModal()">Κλείσιμο</button>
 </div>
+</div>
+
+<footer>
+🎁 Cyprus Deals © 2026
+</footer>
+
 
 <script>
 
-const SUPABASE_URL =
-"https://jsbqhdwxuhiejjnwiwbe.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_kXuBKDd0IFAzPUyHR_zsEg_4rRD3uPn";
+const SUPABASE_URL="https://jsbqhdwxuhiejjnwiwbe.supabase.co";
+const SUPABASE_KEY="sb_publishable_kXuBKDd0IFAzPUyHR_zsEg_4rRD3uPn";
 
 let accessToken="";
 let currentUser=null;
-let myBusiness=null;
-let offers=[];
+let currentBusiness=null;
+let allOffers=[];
+let allBusinesses=[];
+let selectedCategory="All";
+
+
+function esc(v){
+return String(v??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+
+function money(v){
+let n=Number(v);
+return Number.isFinite(n) ? "€"+n.toFixed(2) : "";
+}
+
+
+function discount(price,old){
+let p=Number(price),o=Number(old);
+if(!o || o<=p)return 0;
+return Math.round((1-p/o)*100);
+}
+
+
+function msg(id,text,type){
+let e=document.getElementById(id);
+if(!e)return;
+e.textContent=text;
+e.className="message "+type;
+}
+
 
 async function api(path,options={}){
-  const headers={
-    "apikey":SUPABASE_KEY,
-    "Content-Type":"application/json",
-    ...(options.headers||{})
-  };
+let headers={
+"apikey":SUPABASE_KEY,
+"Content-Type":"application/json",
+...(options.headers||{})
+};
 
-  if(accessToken){
-    headers.Authorization="Bearer "+accessToken;
-  }
+if(accessToken) headers.Authorization="Bearer "+accessToken;
 
-  const r=await fetch(SUPABASE_URL+path,{
-    ...options,
-    headers
-  });
+let r=await fetch(SUPABASE_URL+path,{
+...options,
+headers
+});
 
-  const text=await r.text();
+let text=await r.text();
 
-  let data=null;
-  try{data=text?JSON.parse(text):null}catch(e){data=text}
+let data=null;
+try{data=text?JSON.parse(text):null}catch{}
 
-  if(!r.ok){
-    throw new Error(
-      data?.message ||
-      data?.error_description ||
-      data?.hint ||
-      "Σφάλμα"
-    );
-  }
-
-  return data;
+if(!r.ok){
+throw new Error(data?.message||data?.error_description||data?.hint||text||"Σφάλμα");
 }
 
-function show(id){
-  document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-
-  if(id==="offers") loadOffers();
-  if(id==="dashboard") dashboard();
+return data;
 }
 
-async function register(){
 
-  const email=document.getElementById("regEmail").value.trim();
-  const password=document.getElementById("regPassword").value;
-  const name=document.getElementById("regName").value.trim();
-  const category=document.getElementById("regCategory").value.trim();
-  const city=document.getElementById("regCity").value.trim();
-  const phone=document.getElementById("regPhone").value.trim();
-  const address=document.getElementById("regAddress").value.trim();
+function showPage(page){
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
 
-  const msg=document.getElementById("regMsg");
+let e=document.getElementById(page);
+if(e)e.classList.add("active");
 
-  if(!email||!password||!name){
-    msg.className="msg danger";
-    msg.textContent="Συμπλήρωσε email, κωδικό και όνομα επιχείρησης.";
-    return;
-  }
+window.scrollTo({top:0,behavior:"smooth"});
 
-  try{
+if(page==="offers")renderOffers();
 
-    const u=await api("/auth/v1/signup",{
-      method:"POST",
-      body:JSON.stringify({
-        email,
-        password
-      })
-    });
-
-    if(!u?.user){
-      throw new Error("Δεν δημιουργήθηκε ο λογαριασμός.");
-    }
-
-    await api("/rest/v1/businesses",{
-      method:"POST",
-      headers:{
-        "Prefer":"return=minimal"
-      },
-      body:JSON.stringify({
-        owner_id:u.user.id,
-        name,
-        category,
-        city,
-        phone,
-        address,
-        approved:false,
-        featured:false
-      })
-    });
-
-    msg.className="msg success";
-    msg.textContent=
-      "Ο λογαριασμός δημιουργήθηκε. Έλεγξε το email σου για επιβεβαίωση.";
-
-  }catch(e){
-
-    msg.className="msg danger";
-    msg.textContent=e.message;
-  }
+if(page==="dashboard"){
+if(!currentUser){
+showPage("login");
+return;
 }
+loadDashboard();
+}
+}
+
+
+async function loadBusinesses(){
+try{
+let data=await api("/rest/v1/businesses?select=*");
+allBusinesses=data||[];
+document.getElementById("businessCount").textContent=allBusinesses.length;
+}catch(e){
+console.error(e);
+}
+}
+
+
+async function loadOffers(){
+try{
+let data=await api("/rest/v1/offers?select=*&order=created_at.desc");
+allOffers=(data||[]).filter(x=>x.approved!==false);
+
+document.getElementById("offerCount").textContent=allOffers.length;
+
+renderFilters();
+renderOffers();
+renderHome();
+
+}catch(e){
+console.error(e);
+document.getElementById("offerCount").textContent="0";
+}
+}
+
+
+function businessForOffer(o){
+return allBusinesses.find(b=>String(b.id)===String(o.business_id));
+}
+
+
+function categories(){
+let set=new Set(["All"]);
+
+allOffers.forEach(o=>{
+if(o.category)set.add(o.category);
+let b=businessForOffer(o);
+if(b?.category)set.add(b.category);
+});
+
+return [...set];
+}
+
+
+function renderFilters(){
+let e=document.getElementById("filters");
+
+e.innerHTML=categories().map(c=>
+`<button class="filter ${selectedCategory===c?"active":""}" onclick="setCategory('${esc(c)}')">${esc(c)}</button>`
+).join("");
+}
+
+
+function setCategory(c){
+selectedCategory=c;
+renderFilters();
+renderOffers();
+}
+
+
+function offerCard(o){
+let b=businessForOffer(o);
+let d=discount(o.price,o.old_price);
+
+return `
+<div class="card">
+
+${o.featured?'<span class="badge">⭐ Προτεινόμενη</span>':''}
+
+<h3>🎁 ${esc(o.title)}</h3>
+
+<div class="business">🏪 ${esc(b?.name||"Επιχείρηση")}</div>
+
+<div class="description">${esc(o.description||"")}</div>
+
+<div class="price">
+${money(o.price)}
+${o.old_price?`<span class="old">${money(o.old_price)}</span>`:""}
+${d?` <span class="badge">-${d}%</span>`:""}
+</div>
+
+${o.location?`<p>📍 ${esc(o.location)}</p>`:""}
+
+<div class="offer-actions">
+<button class="primary" onclick="claimOffer(${Number(o.id)})">
+🎁 Πάρε την προσφορά
+</button>
+</div>
+
+</div>`;
+}
+
+
+function filteredOffers(){
+let q=(document.getElementById("search")?.value||"").toLowerCase().trim();
+
+let arr=allOffers.filter(o=>{
+let b=businessForOffer(o);
+
+let text=[
+o.title,
+o.description,
+o.location,
+b?.name,
+b?.category,
+o.category
+].join(" ").toLowerCase();
+
+let categoryOK=
+selectedCategory==="All" ||
+o.category===selectedCategory ||
+b?.category===selectedCategory;
+
+return (!q||text.includes(q))&&categoryOK;
+});
+
+let sort=document.getElementById("sort")?.value||"new";
+
+if(sort==="price"){
+arr.sort((a,b)=>Number(a.price)-Number(b.price));
+}
+
+if(sort==="discount"){
+arr.sort((a,b)=>discount(b.price,b.old_price)-discount(a.price,a.old_price));
+}
+
+if(sort==="new"){
+arr.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+}
+
+return arr;
+}
+
+
+function renderOffers(){
+let e=document.getElementById("offersList");
+if(!e)return;
+
+let arr=filteredOffers();
+
+if(!arr.length){
+e.innerHTML='<div class="box"><h3>Δεν βρέθηκαν προσφορές.</h3><p>Δοκίμασε άλλη αναζήτηση ή κατηγορία.</p></div>';
+return;
+}
+
+e.innerHTML=arr.map(offerCard).join("");
+}
+
+
+function renderHome(){
+let e=document.getElementById("homeOffers");
+if(!e)return;
+
+let arr=allOffers.slice(0,3);
+
+if(!arr.length){
+e.innerHTML='<div class="box"><p>Δεν υπάρχουν ακόμα προσφορές.</p></div>';
+return;
+}
+
+e.innerHTML=arr.map(offerCard).join("");
+}
+
+
+async function claimOffer(id){
+
+let offer=allOffers.find(x=>String(x.id)===String(id));
+
+if(!offer){
+alert("Η προσφορά δεν βρέθηκε.");
+return;
+}
+
+try{
+
+let result=await api("/rest/v1/rpc/claim_offer",{
+method:"POST",
+body:JSON.stringify({
+p_offer_id:Number(id)
+})
+});
+
+let code;
+
+if(typeof result==="string"){
+code=result;
+}else if(Array.isArray(result)){
+code=result[0]?.code;
+}else{
+code=result?.code;
+}
+
+if(!code){
+throw new Error("Δεν δημιουργήθηκε κωδικός.");
+}
+
+document.getElementById("couponCode").textContent=code;
+
+document.getElementById("couponText").textContent=
+"Ο κωδικός δημιουργήθηκε επιτυχώς. Δείξ' τον στην επιχείρηση.";
+
+document.getElementById("modal").classList.add("show");
+
+}catch(e){
+
+console.error(e);
+
+alert("Δεν ήταν δυνατή η δημιουργία του coupon: "+e.message);
+
+}
+}
+
+
+function closeModal(){
+document.getElementById("modal").classList.remove("show");
+}
+
+
+async function registerBusiness(){
+
+let name=document.getElementById("regName").value.trim();
+let description=document.getElementById("regDescription").value.trim();
+let category=document.getElementById("regCategory").value.trim();
+let city=document.getElementById("regCity").value.trim();
+let phone=document.getElementById("regPhone").value.trim();
+let address=document.getElementById("regAddress").value.trim();
+let email=document.getElementById("regEmail").value.trim();
+let password=document.getElementById("regPassword").value;
+
+if(!name||!email||!password){
+msg("registerMsg","Συμπλήρωσε όνομα, email και κωδικό.","error");
+return;
+}
+
+try{
+
+let session=await api("/auth/v1/signup",{
+method:"POST",
+body:JSON.stringify({
+email,
+password,
+data:{name}
+})
+});
+
+accessToken=session?.access_token||"";
+currentUser=session?.user||null;
+
+if(accessToken&&currentUser){
+
+await api("/rest/v1/businesses",{
+method:"POST",
+headers:{
+"Prefer":"return=minimal"
+},
+body:JSON.stringify({
+owner_id:currentUser.id,
+name,
+description,
+category,
+city,
+phone,
+address
+})
+});
+
+await loadBusinesses();
+
+msg("registerMsg","Η επιχείρηση δημιουργήθηκε επιτυχώς!","success");
+
+updateNav();
+
+setTimeout(()=>showPage("dashboard"),700);
+
+}else{
+
+msg(
+"registerMsg",
+"Ο λογαριασμός δημιουργήθηκε. Αν ζητηθεί επιβεβαίωση email, επιβεβαίωσέ το και μετά κάνε σύνδεση.",
+"success"
+);
+
+}
+
+}catch(e){
+msg("registerMsg",e.message,"error");
+}
+}
+
 
 async function login(){
 
-  const email=document.getElementById("loginEmail").value.trim();
-  const password=document.getElementById("loginPassword").value;
-  const msg=document.getElementById("loginMsg");
+let email=document.getElementById("loginEmail").value.trim();
+let password=document.getElementById("loginPassword").value;
 
-  try{
-
-    const x=await api(
-      "/auth/v1/token?grant_type=password",
-      {
-        method:"POST",
-        body:JSON.stringify({
-          email,
-          password
-        })
-      }
-    );
-
-    accessToken=x.access_token;
-    currentUser=x.user;
-
-    msg.className="msg success";
-    msg.textContent="Επιτυχής σύνδεση!";
-
-    setTimeout(()=>{
-      show("dashboard");
-    },500);
-
-  }catch(e){
-
-    msg.className="msg danger";
-    msg.textContent=e.message;
-  }
+if(!email||!password){
+msg("loginMsg","Βάλε email και κωδικό.","error");
+return;
 }
 
-async function getBusiness(){
+try{
 
-  if(!currentUser)return null;
+let data=await api("/auth/v1/token?grant_type=password",{
+method:"POST",
+body:JSON.stringify({
+email,
+password
+})
+});
 
-  const d=await api(
-    "/rest/v1/businesses?select=*&owner_id=eq."
-    +encodeURIComponent(currentUser.id)
-  );
+accessToken=data.access_token;
+currentUser=data.user;
 
-  myBusiness=d?.[0]||null;
+await loadBusiness();
 
-  return myBusiness;
+updateNav();
+
+msg("loginMsg","Η σύνδεση έγινε επιτυχώς!","success");
+
+setTimeout(()=>showPage("dashboard"),500);
+
+}catch(e){
+
+msg("loginMsg",e.message,"error");
+
+}
 }
 
-async function dashboard(){
 
-  if(!accessToken||!currentUser){
+async function loadBusiness(){
 
-    document.getElementById("businessInfo").innerHTML=
-      '<div class="msg">Πρέπει πρώτα να συνδεθείς ως επιχείρηση.</div>';
+if(!currentUser)return;
 
-    return;
-  }
+try{
 
-  try{
+let data=await api(
+"/rest/v1/businesses?owner_id=eq."+encodeURIComponent(currentUser.id)+"&select=*"
+);
 
-    const b=await getBusiness();
+currentBusiness=data?.[0]||null;
 
-    if(!b){
-
-      document.getElementById("businessInfo").innerHTML=
-        '<div class="msg danger">Δεν βρέθηκε επιχείρηση.</div>';
-
-      return;
-    }
-
-    document.getElementById("businessInfo").innerHTML=`
-      <div class="card">
-        <h3>🏪 ${escapeHtml(b.name)}</h3>
-        <p>📍 ${escapeHtml(b.city||"")}</p>
-        <p>📞 ${escapeHtml(b.phone||"")}</p>
-        <p>Κατηγορία: ${escapeHtml(b.category||"")}</p>
-        <p>Κατάσταση:
-          <b>${b.approved?"✅ Εγκεκριμένη":"⏳ Σε αναμονή έγκρισης"}</b>
-        </p>
-      </div>
-    `;
-
-    await loadMyOffers();
-
-  }catch(e){
-
-    document.getElementById("businessInfo").innerHTML=
-      '<div class="msg danger">'+escapeHtml(e.message)+'</div>';
-  }
+}catch(e){
+console.error(e);
+}
 }
 
-async function addOffer(){
 
-  const msg=document.getElementById("offerMsg");
+function updateNav(){
 
-  try{
+document.getElementById("dashBtn").style.display=
+currentUser?"inline-block":"none";
+}
 
-   
+
+async function loadDashboard(){
+
+if(!currentUser)return;
+
+await loadBusiness();
+
+let info=document.getElementById("businessInfo");
+
+if(!currentBusiness){
+
+info.innerHTML=
+'<p class="small">Δεν βρέθηκε επιχείρηση συνδεδεμένη με αυτόν τον λογαριασμό.</p>';
+
+return;
+}
+
+info.innerHTML=`
+<h3>🏪 ${esc(currentBusiness.name)}</h3>
+<p>${esc(currentBusiness.description||"")}</p>
+<p>📍 ${esc(currentBusiness.city||currentBusiness.address||"")}</p>
+<p>📞 ${esc(currentBusiness.phone||"")}</p>
+`;
+
+await loadMyOffers();
+}
+
+
+async function loadMyOffers(){
+
+if(!currentUser)return;
+
+let e=document.getElementById("myOffers");
+
+try{
+
+let data=await api(
+"/rest/v1/offers?owner_id=eq."+encodeURIComponent(currentUser.id)+"&select=*&order=created_at.desc"
+);
+
+if(!data?.length){
+
+e.innerHTML="<p>Δεν έχεις ακόμα προσφορές.</p>";
+return;
+}
+
+e.innerHTML=data.map(o=>`
+<div class="card">
+<h3>${esc(o.title)}</h3>
+<p>${esc(o.description||"")}</p>
+<strong>${money(o.price)}</strong>
+<br><br>
+<button onclick="deleteOffer(${Number(o.id)})">🗑️ Διαγραφή</button>
+</div>
+`).join("");
+
+}catch(err){
+
+e.innerHTML="<p>"+esc(err.message)+"</p>";
+
+}
+}
+
+
+async function saveOffer(){
+
+if(!currentUser||!currentBusiness){
+
+alert("Πρέπει πρώτα να συνδεθείς ως επιχείρηση.");
+return;
+}
+
+let title=document.getElementById("offerTitle").value.trim();
+let description=document.getElementById("offerDescription").value.trim();
+let price=document.getElementById("offerPrice").value;
+let oldPrice=document.getElementById("offerOldPrice").value;
+let location=document.getElementById("offerLocation").value.trim();
+let image=document.getElementById("offerImage").value.trim();
+
+if(!title||price===""){
+
+alert("Βάλε τίτλο και τιμή.");
+return;
+}
+
+try{
+
+await api("/rest/v1/offers",{
+method:"POST",
+headers:{
+"Prefer":"return=minimal"
+},
+body:JSON.stringify({
+title,
+description,
+price:Number(price),
+old_price:oldPrice===""?null:Number(oldPrice),
+location,
+image_url:image,
+business_id:Number(currentBusiness.id),
+owner_id:currentUser.id
+})
+});
+
+alert("🎉 Η προσφορά δημοσιεύτηκε!");
+
+document.getElementById("offerTitle").value="";
+document.getElementById("offerDescription").value="";
+document.getElementById("offerPrice").value="";
+document.getElementById("offerOldPrice").value="";
+document.getElementById("offerLocation").value="";
+document.getElementById("offerImage").value="";
+
+await loadOffers();
+await loadMyOffers();
+
+}catch(e){
+
+alert("Σφάλμα: "+e.message);
+
+}
+}
+
+
+async function deleteOffer(id){
+
+if(!confirm("Να διαγραφεί η προσφορά;"))return;
+
+try{
+
+await api(
+"/rest/v1/offers?id=eq."+Number(id)+"&owner_id=eq."+encodeURIComponent(currentUser.id),
+{
+method:"DELETE"
+}
+);
+
+await loadOffers();
+await loadMyOffers();
+
+}catch(e){
+
+alert("Σφάλμα: "+e.message);
+
+}
+}
+
+
+function logout(){
+
+accessToken="";
+currentUser=null;
+currentBusiness=null;
+
+updateNav();
+showPage("home");
+
+alert("Έγινε αποσύνδεση.");
+
+}
+
+
+document.addEventListener("DOMContentLoaded",async()=>{
+
+try{
+
+await loadBusinesses();
+await loadOffers();
+updateNav();
+
+}catch(e){
+
+console.error(e);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
