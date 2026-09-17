@@ -326,7 +326,21 @@ onclick="login()">
 </div>
 
 </section>
+<section id="dashboard" class="page">
 
+<h2>📊 Dashboard</h2>
+
+<div class="card">
+
+<h3>Καλώς ήρθες στο Dashboard!</h3>
+
+<p>✅ Η σύνδεσή σου έγινε επιτυχώς.</p>
+
+<p>Από εδώ θα διαχειρίζεσαι την επιχείρησή σου και τις προσφορές σου.</p>
+
+</div>
+
+</section>
 </main>
 
 
@@ -453,7 +467,7 @@ async function login(){
     }
 
     message.textContent='✅ Η σύνδεση πέτυχε!';
-
+showPage('dashboard');
   }catch(error){
 
     console.error(error);
