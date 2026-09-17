@@ -244,11 +244,15 @@ textarea{
   display:none
 }
 
-.message.show{display:block}
+.message.show{
+  display:block
+}
+
 .message.ok{
   background:#dff6e7;
   color:#166b36
 }
+
 .message.error{
   background:#ffe4e4;
   color:#a32222
@@ -290,7 +294,9 @@ textarea{
   z-index:100
 }
 
-.modal.show{display:flex}
+.modal.show{
+  display:flex
+}
 
 .modal-content{
   background:white;
@@ -361,9 +367,8 @@ footer{
 <section id="home" class="page active">
   <div class="hero">
     <h2>🇨🇾 Καλώς ήρθες στο Cyprus Deals</h2>
-    <p>
-      Βρες προσφορές από επιχειρήσεις σε όλη την Κύπρο.
-    </p>
+    <p>Βρες προσφορές από επιχειρήσεις σε όλη την Κύπρο.</p>
+
     <button class="btn btn-blue" onclick="showPage('offers')">
       🎁 Δες τις προσφορές
     </button>
@@ -470,17 +475,16 @@ footer{
     <p id="userInfo"></p>
   </div>
 
-  <!-- ΝΕΟ ΣΥΣΤΗΜΑ ΕΞΑΡΓΥΡΩΣΗΣ -->
   <div class="form">
+
     <h2>🎟️ Εξαργύρωση Coupon</h2>
 
-    <p>
-      Βάλε τον κωδικό που σου δείχνει ο πελάτης.
-    </p>
+    <p>Βάλε τον κωδικό που σου δείχνει ο πελάτης.</p>
 
     <div id="redeemMsg" class="message"></div>
 
     <label>Κωδικός Coupon</label>
+
     <input
       id="redeemCode"
       placeholder="π.χ. CD-602B28"
@@ -491,9 +495,11 @@ footer{
     <button class="btn btn-green" onclick="redeemByCode()">
       ✅ Εξαργύρωση Coupon
     </button>
+
   </div>
 
   <div class="form">
+
     <h2>➕ Νέα προσφορά</h2>
 
     <div id="offerMsg" class="message"></div>
@@ -511,6 +517,7 @@ footer{
     <input id="offerOldPrice" type="number" step="0.01" placeholder="6.00">
 
     <label>Κατηγορία</label>
+
     <select id="offerCategory">
       <option value="food">🍔 Φαγητό</option>
       <option value="coffee">☕ Καφέ</option>
@@ -528,13 +535,17 @@ footer{
     <button class="btn btn-blue" onclick="createOffer()">
       ➕ Δημοσίευση προσφοράς
     </button>
+
   </div>
 
   <div class="form">
+
     <h2>📋 Οι προσφορές μου</h2>
+
     <div id="myOffers">
       Φόρτωση...
     </div>
+
   </div>
 
 </section>
@@ -544,11 +555,13 @@ footer{
 <footer>
   <b>🎁 Cyprus Deals</b>
   <br>
-  <span class="small">Προσφορές από επιχειρήσεις σε όλη την Κύπρο</span>
+  <span class="small">
+    Προσφορές από επιχειρήσεις σε όλη την Κύπρο
+  </span>
 </footer>
 
-<!-- COUPON MODAL -->
 <div id="modal" class="modal">
+
   <div class="modal-content">
 
     <h2>🎉 Η προσφορά σου</h2>
@@ -568,6 +581,7 @@ footer{
     </button>
 
   </div>
+
 </div>
 
 <script>
@@ -583,6 +597,8 @@ let allOffers = [];
 let allBusinesses = [];
 let currentCategory = "all";
 
+/* ---------------- API ---------------- */
+
 async function api(path, options = {}){
 
   const headers = {
@@ -592,28 +608,37 @@ async function api(path, options = {}){
   };
 
   if(currentUser && currentUser.access_token){
+
     headers["Authorization"] =
       "Bearer " + currentUser.access_token;
+
   }else{
+
     headers["Authorization"] =
       "Bearer " + SUPABASE_KEY;
   }
 
-  const response = await fetch(
-    SUPABASE_URL + path,
-    {
-      ...options,
-      headers
-    }
-  );
+  const response =
+    await fetch(
+      SUPABASE_URL + path,
+      {
+        ...options,
+        headers
+      }
+    );
 
-  const text = await response.text();
+  const text =
+    await response.text();
 
   let data;
 
   try{
-    data = text ? JSON.parse(text) : null;
+
+    data =
+      text ? JSON.parse(text) : null;
+
   }catch{
+
     data = text;
   }
 
@@ -632,14 +657,30 @@ async function api(path, options = {}){
   return data;
 }
 
+/* ---------------- ESCAPE ---------------- */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
 /* ---------------- PAGES ---------------- */
 
 function showPage(id){
 
-  document.querySelectorAll(".page")
-    .forEach(p => p.classList.remove("active"));
+  document
+    .querySelectorAll(".page")
+    .forEach(
+      p => p.classList.remove("active")
+    );
 
-  const page = document.getElementById(id);
+  const page =
+    document.getElementById(id);
 
   if(page){
     page.classList.add("active");
@@ -652,7 +693,9 @@ function showPage(id){
   if(id === "dashboard"){
 
     if(!currentUser){
+
       showPage("login");
+
       return;
     }
 
@@ -665,15 +708,16 @@ function showPage(id){
   });
 }
 
-/* ---------------- DATA ---------------- */
+/* ---------------- BUSINESSES ---------------- */
 
 async function loadBusinesses(){
 
   try{
 
-    allBusinesses = await api(
-      "/rest/v1/businesses?select=*"
-    );
+    allBusinesses =
+      await api(
+        "/rest/v1/businesses?select=*"
+      );
 
   }catch(e){
 
@@ -682,6 +726,8 @@ async function loadBusinesses(){
     allBusinesses = [];
   }
 }
+
+/* ---------------- OFFERS LOAD ---------------- */
 
 async function loadOffers(){
 
@@ -695,9 +741,10 @@ async function loadOffers(){
 
     await loadBusinesses();
 
-    allOffers = await api(
-      "/rest/v1/offers?select=*&approved=eq.true&order=created_at.desc"
-    );
+    allOffers =
+      await api(
+        "/rest/v1/offers?select=*&approved=eq.true&order=created_at.desc"
+      );
 
     renderOffers();
 
@@ -710,12 +757,14 @@ async function loadOffers(){
   }
 }
 
-/* ---------------- OFFERS ---------------- */
+/* ---------------- OFFER HELPERS ---------------- */
 
 function getBusiness(offer){
 
   return allBusinesses.find(
-    b => String(b.id) === String(offer.business_id)
+    b =>
+      String(b.id) ===
+      String(offer.business_id)
   );
 }
 
@@ -734,10 +783,14 @@ function categoryName(c){
 
 function discountValue(o){
 
-  const price = Number(o.price);
-  const old = Number(o.old_price);
+  const price =
+    Number(o.price);
+
+  const old =
+    Number(o.old_price);
 
   if(old > price && old > 0){
+
     return Math.round(
       ((old-price)/old)*100
     );
@@ -746,51 +799,71 @@ function discountValue(o){
   return 0;
 }
 
+/* ---------------- RENDER OFFERS ---------------- */
+
 function renderOffers(){
 
   const grid =
     document.getElementById("offersGrid");
 
   const search =
-    (document.getElementById("search")?.value || "")
+    (
+      document.getElementById("search")?.value ||
+      ""
+    )
     .toLowerCase()
     .trim();
 
   const sort =
-    document.getElementById("sort")?.value || "new";
+    document.getElementById("sort")?.value ||
+    "new";
 
-  let list = [...allOffers];
+  let list =
+    [...allOffers];
 
-  list = list.filter(o => {
+  list =
+    list.filter(o => {
 
-    const b = getBusiness(o);
+      const b =
+        getBusiness(o);
 
-    const text = (
-      (o.title || "") + " " +
-      (o.description || "") + " " +
-      (o.location || "") + " " +
-      (b?.name || "")
-    ).toLowerCase();
+      const text =
+        (
+          (o.title || "") + " " +
+          (o.description || "") + " " +
+          (o.location || "") + " " +
+          (b?.name || "")
+        ).toLowerCase();
 
-    const matchesSearch =
-      !search || text.includes(search);
+      const matchesSearch =
+        !search ||
+        text.includes(search);
 
-    const matchesCategory =
-      currentCategory === "all" ||
-      o.category === currentCategory;
+      const matchesCategory =
+        currentCategory === "all" ||
+        o.category === currentCategory;
 
-    return matchesSearch && matchesCategory;
-  });
+      return (
+        matchesSearch &&
+        matchesCategory
+      );
+    });
 
   if(sort === "price"){
+
     list.sort(
-      (a,b) => Number(a.price)-Number(b.price)
+      (a,b) =>
+        Number(a.price) -
+        Number(b.price)
     );
   }
 
   if(sort === "discount"){
+
     list.sort(
-      (a,b) => discountValue(b)-discountValue(a)
+      (a,b) =>
+        discountValue(b) -
+        discountValue(a)
     );
   }
 
@@ -806,9 +879,12 @@ function renderOffers(){
     list.map(offerCard).join("");
 }
 
+/* ---------------- OFFER CARD ---------------- */
+
 function offerCard(o){
 
-  const b = getBusiness(o);
+  const b =
+    getBusiness(o);
 
   const discount =
     discountValue(o);
@@ -822,46 +898,76 @@ function offerCard(o){
     "";
 
   return `
+
     <div class="card">
 
       ${
         image
-        ? `<img
-             src="${escapeHtml(image)}"
-             style="width:100%;height:190px;object-fit:cover;border-radius:16px;margin-bottom:15px"
-             onerror="this.style.display='none'"
-           >`
-        : ""
+        ?
+        `<img
+          src="${escapeHtml(image)}"
+          alt="Εικόνα προσφοράς"
+          style="width:100%;height:190px;object-fit:cover;border-radius:16px;margin-bottom:15px"
+          onerror="this.style.display='none'"
+        >`
+        :
+        ""
       }
 
       <div class="business">
-        🏪 ${escapeHtml(b?.name || "Επιχείρηση")}
+        🏪 ${escapeHtml(
+          b?.name ||
+          "Επιχείρηση"
+        )}
       </div>
 
-      <h3>${escapeHtml(o.title || "")}</h3>
+      <h3>
+        ${escapeHtml(
+          o.title || ""
+        )}
+      </h3>
 
       <div class="desc">
-        ${escapeHtml(o.description || "")}
+        ${escapeHtml(
+          o.description || ""
+        )}
       </div>
 
       <div class="price">
-        €${Number(o.price || 0).toFixed(2)}
+
+        €${Number(
+          o.price || 0
+        ).toFixed(2)}
 
         ${
-          oldPrice > Number(o.price)
-          ? `<span class="old">€${oldPrice.toFixed(2)}</span>`
-          : ""
+          oldPrice >
+          Number(o.price)
+          ?
+          `<span class="old">
+            €${oldPrice.toFixed(2)}
+          </span>`
+          :
+          ""
         }
 
         ${
           discount
-          ? `<span class="discount">-${discount}%</span>`
-          : ""
+          ?
+          `<span class="discount">
+            -${discount}%
+          </span>`
+          :
+          ""
         }
+
       </div>
 
       <div class="location">
-        📍 ${escapeHtml(o.location || b?.city || "Κύπρος")}
+        📍 ${escapeHtml(
+          o.location ||
+          b?.city ||
+          "Κύπρος"
+        )}
       </div>
 
       <button
@@ -875,13 +981,24 @@ function offerCard(o){
   `;
 }
 
-function setCategory(category,button){
+/* ---------------- CATEGORY ---------------- */
 
-  currentCategory = category;
+function setCategory(
+  category,
+  button
+){
 
-  document.querySelectorAll(
-    "#categoryFilters button"
-  ).forEach(b => b.classList.remove("active"));
+  currentCategory =
+    category;
+
+  document
+    .querySelectorAll(
+      "#categoryFilters button"
+    )
+    .forEach(
+      b =>
+        b.classList.remove("active")
+    );
 
   button.classList.add("active");
 
@@ -894,12 +1011,16 @@ async function claimOffer(id){
 
   const offer =
     allOffers.find(
-      x => String(x.id) === String(id)
+      x =>
+        String(x.id) ===
+        String(id)
     );
 
   if(!offer){
 
-    alert("Η προσφορά δεν βρέθηκε.");
+    alert(
+      "Η προσφορά δεν βρέθηκε."
+    );
 
     return;
   }
@@ -925,11 +1046,13 @@ async function claimOffer(id){
 
     }else if(Array.isArray(result)){
 
-      code = result[0]?.code;
+      code =
+        result[0]?.code;
 
     }else{
 
-      code = result?.code;
+      code =
+        result?.code;
     }
 
     if(!code){
@@ -975,35 +1098,62 @@ function closeModal(){
 async function registerBusiness(){
 
   const msg =
-    document.getElementById("registerMsg");
+    document.getElementById(
+      "registerMsg"
+    );
 
   try{
 
     const name =
-      document.getElementById("regName").value.trim();
+      document.getElementById(
+        "regName"
+      ).value.trim();
 
     const email =
-      document.getElementById("regEmail").value.trim();
+      document.getElementById(
+        "regEmail"
+      ).value.trim();
 
     const password =
-      document.getElementById("regPassword").value;
+      document.getElementById(
+        "regPassword"
+      ).value;
 
     const phone =
-      document.getElementById("regPhone").value.trim();
+      document.getElementById(
+        "regPhone"
+      ).value.trim();
 
     const city =
-      document.getElementById("regCity").value.trim();
+      document.getElementById(
+        "regCity"
+      ).value.trim();
 
     const address =
-      document.getElementById("regAddress").value.trim();
+      document.getElementById(
+        "regAddress"
+      ).value.trim();
 
     const description =
-      document.getElementById("regDescription").value.trim();
+      document.getElementById(
+        "regDescription"
+      ).value.trim();
 
-    if(!name || !email || !password){
+    if(
+      !name ||
+      !email ||
+      !password
+    ){
 
       throw new Error(
         "Συμπλήρωσε όνομα, email και κωδικό."
+      );
+    }
+
+    if(password.length < 6){
+
+      throw new Error(
+        "Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες."
       );
     }
 
@@ -1021,7 +1171,8 @@ async function registerBusiness(){
 
     if(auth?.access_token){
 
-      currentUser = auth;
+      currentUser =
+        auth;
     }
 
     if(!auth?.user){
@@ -1045,89 +1196,9 @@ async function registerBusiness(){
           }
         );
 
-      currentUser = loginResult;
+      currentUser =
+        loginResult;
     }
 
     await api(
-      "/rest/v1/businesses",
-      {
-        method:"POST",
-        headers:{
-          "Prefer":"return=minimal"
-        },
-        body:JSON.stringify({
-          owner_id:currentUser.user.id,
-          name,
-          phone,
-          city,
-          address,
-          description,
-          approved:false,
-          featured:false
-        })
-      }
-    );
-
-    msg.className =
-      "message show ok";
-
-    msg.textContent =
-      "✅ Η επιχείρηση δημιουργήθηκε. Μπορείς τώρα να μπεις στο Dashboard.";
-
-    updateNav();
-
-    setTimeout(
-      () => showPage("dashboard"),
-      1000
-    );
-
-  }catch(e){
-
-    console.error(e);
-
-    msg.className =
-      "message show error";
-
-    msg.textContent =
-      "❌ " + e.message;
-  }
-}
-
-/* ---------------- LOGIN ---------------- */
-
-async function login(){
-
-  const msg =
-    document.getElementById("loginMsg");
-
-  try{
-
-    const email =
-      document.getElementById("loginEmail")
-      .value.trim();
-
-    const password =
-      document.getElementById("loginPassword")
-      .value;
-
-    if(!email || !password){
-
-      throw new Error(
-        "Βάλε email και κωδικό."
-      );
-    }
-
-    currentUser =
-      await api(
-        "/auth/v1/token?grant_type=password",
-        {
-          method:"POST",
-          body:JSON.stringify({
-            email,
-            password
-          })
-        }
-      );
-
-    msg.className =
-      "message show 
+      "/rest/v1/
