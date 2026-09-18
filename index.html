@@ -601,17 +601,7 @@ function showPage(page){
 }
 
 
-function claimOffer(name){
 
-  const message =
-    document.getElementById('offerMessage');
-
-  message.textContent =
-    '✅ Επέλεξες την προσφορά: ' + name;
-
-  message.classList.add('show');
-
-}
 
 
 function registerBusiness(){
@@ -637,7 +627,11 @@ function registerBusiness(){
     .classList.add('show');
 
 }
+function claimOffer(name){
 
+  alert('🎟️ Επέλεξες την προσφορά: ' + name);
+
+}
 
 function login(){
 
