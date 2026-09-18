@@ -627,10 +627,64 @@ function registerBusiness(){
     .classList.add('show');
 
 }
-function claimOffer(name){
+const 
+  SUPABASE_URL='https://jsbqhdwxuhiejjnwiwbe.supabase.co';
+const SUPABASE_KEY='sb_publishable_kXuBKDd0IFAzPUyHR_zsEg_4rRD3uPn';
+function makeCouponCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code='CD-';
 
-  alert('🎟️ Επέλεξες την προσφορά: ' + name);
+  for(let i=0;i<6;i++){
+    code += chars[Math.floor(Math.random()*chars.length)];
+  }
 
+  return code;
+}
+
+async function claimOffer(name){
+
+  const code=makeCouponCode();
+
+  try{
+
+    const response=await fetch(
+      SUPABASE_URL+'/rest/v1/claimed_offers',
+      {
+        method:'POST',
+        headers:{
+          apikey:SUPABASE_KEY,
+          Authorization:'Bearer '+SUPABASE_KEY,
+          'Content-Type':'application/json',
+          Prefer:'return=minimal'
+        },
+        body:JSON.stringify({
+          offer_name:name,
+          coupon_code:code
+        })
+      }
+    );
+
+    if(!response.ok){
+      throw new Error(await response.text());
+    }
+
+    alert(
+      '🎟️ Η προσφορά σου\\n\\n' +
+      name +
+      '\\n\\nΚωδικός: ' +
+      code
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      '❌ Δεν αποθηκεύτηκε η προσφορά.\\n' +
+      error.message
+    );
+
+  }
 }
 
 function login(){
